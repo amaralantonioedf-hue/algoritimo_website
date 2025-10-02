@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideDown 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: #fff;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .card h3 {
+            color: #87ceeb;
+            margin: 20px 0 10px 0;
+            font-size: 1.4em;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border-left: 4px solid #ffd700;
+        }
+
+        .visualization {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .sort-demo {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 5px;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        .bar {
+            background: linear-gradient(to top, #ff6b6b, #ffd700);
+            width: 30px;
+            transition: all 0.3s ease;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .bar.comparing {
+            background: linear-gradient(to top, #4ecdc4, #44a08d);
+        }
+
+        .bar.sorted {
+            background: linear-gradient(to top, #51cf66, #37b24d);
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .complexity-table th,
+        .complexity-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .complexity-table th {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+
+        .complexity-table tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .emoji {
+            font-size: 2em;
+            margin: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀Algoritmos</h1>
+            <p class="subtitle">Explore, aprenda e visualize algoritmos fundamentais da programação</p>
+        </header>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('intro')">Introdução</button>
+            <button class="nav-btn" onclick="showSection('sorting')">Ordenação</button>
+            <button class="nav-btn" onclick="showSection('searching')">Busca</button>
+            <button class="nav-btn" onclick="showSection('complexity')">Complexidade</button>
+        </div>
+
+        <div id="intro" class="content-section active">
+            <div class="card">
+                <h2>🎯 O que são Algoritmos?</h2>
+                <p>Um algoritmo é uma sequência finita de instruções bem definidas para resolver um problema ou executar uma tarefa. Pense nele como uma receita de bolo: cada passo deve ser seguido em ordem para alcançar o resultado desejado.</p>
+                
+                <h3>📋 Características de um bom algoritmo:</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>Clareza:</strong> Instruções precisas e sem ambiguidade</li>
+                    <li><strong>Eficiência:</strong> Usa recursos computacionais de forma otimizada</li>
+                    <li><strong>Finitude:</strong> Termina após um número finito de passos</li>
+                    <li><strong>Entrada/Saída:</strong> Recebe dados e produz resultados</li>
+                    <li><strong>Corretude:</strong> Produz a resposta correta para todas as entradas válidas</li>
+                </ul>
+            </div>
+
+            <div class="grid-container">
+                <div class="card">
+                    <div class="emoji">🔢</div>
+                    <h3>Algoritmos de Ordenação</h3>
+                    <p>Organizam dados em ordem crescente ou decrescente. Exemplos: Bubble Sort, Quick Sort, Merge Sort.</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🔍</div>
+                    <h3>Algoritmos de Busca</h3>
+                    <p>Encontram elementos específicos em estruturas de dados. Exemplos: Busca Linear, Busca Binária.</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🌳</div>
+                    <h3>Estruturas de Dados</h3>
+                    <p>Organizam e armazenam dados eficientemente. Exemplos: Arrays, Listas, Árvores, Grafos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="sorting" class="content-section">
+            <div class="card">
+                <h2>🔄 Algoritmos de Ordenação</h2>
+                
+                <h3>Bubble Sort</h3>
+                <p>Compara elementos adjacentes e os troca se estiverem na ordem errada. Simples, mas ineficiente para grandes conjuntos.</p>
+                <div class="code-block">
+function bubbleSort(arr) {
+    let n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+    return arr;
+}
+                </div>
+
+                <h3>Quick Sort</h3>
+                <p>Usa a estratégia "dividir para conquistar". Escolhe um pivô e particiona o array ao redor dele.</p>
+                <div class="code-block">
+function quickSort(arr) {
+    if (arr.length <= 1) return arr;
+    
+    let pivot = arr[Math.floor(arr.length / 2)];
+    let left = arr.filter(x => x < pivot);
+    let middle = arr.filter(x => x === pivot);
+    let right = arr.filter(x => x > pivot);
+    
+    return [...quickSort(left), ...middle, ...quickSort(right)];
+}
+                </div>
+            </div>
+
+            <div class="visualization">
+                <h3>Visualização: Bubble Sort</h3>
+                <div class="sort-demo" id="sortDemo"></div>
+                <button class="control-btn" onclick="generateArray()">Novo Array</button>
+                <button class="control-btn" onclick="startBubbleSort()">Ordenar</button>
+            </div>
+        </div>
+
+        <div id="searching" class="content-section">
+            <div class="card">
+                <h2>🔎 Algoritmos de Busca</h2>
+                
+                <h3>Busca Linear</h3>
+                <p>Percorre sequencialmente cada elemento até encontrar o alvo ou chegar ao fim.</p>
+                <div class="code-block">
+function linearSearch(arr, target) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === target) {
+            return i; // Retorna o índice encontrado
+        }
+    }
+    return -1; // Não encontrado
+}
+                </div>
+
+                <h3>Busca Binária</h3>
+                <p>Funciona apenas em arrays ordenados. Divide o espaço de busca pela metade a cada iteração.</p>
+                <div class="code-block">
+function binarySearch(arr, target) {
+    let left = 0;
+    let right = arr.length - 1;
+    
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        
+        if (arr[mid] === target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return -1;
+}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Comparação de Eficiência</h3>
+                <p>Para um array com 1.000.000 de elementos:</p>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>Busca Linear:</strong> Até 1.000.000 comparações</li>
+                    <li><strong>Busca Binária:</strong> Apenas ~20 comparações</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="complexity" class="content-section">
+            <div class="card">
+                <h2>⏱️ Complexidade de Algoritmos</h2>
+                <p>A notação Big O descreve como o tempo de execução ou espaço usado cresce com o tamanho da entrada.</p>
+
+                <h3>Principais Complexidades:</h3>
+                
+                <table class="complexity-table">
+                    <tr>
+                        <th>Notação</th>
+                        <th>Nome</th>
+                        <th>Exemplo</th>
+                        <th>Desempenho</th>
+                    </tr>
+                    <tr>
+                        <td>O(1)</td>
+                        <td>Constante</td>
+                        <td>Acesso a array por índice</td>
+                        <td>🟢 Excelente</td>
+                    </tr>
+                    <tr>
+                        <td>O(log n)</td>
+                        <td>Logarítmica</td>
+                        <td>Busca Binária</td>
+                        <td>🟢 Muito Bom</td>
+                    </tr>
+                    <tr>
+                        <td>O(n)</td>
+                        <td>Linear</td>
+                        <td>Busca Linear</td>
+                        <td>🟡 Bom</td>
+                    </tr>
+                    <tr>
+                        <td>O(n log n)</td>
+                        <td>Linearítmica</td>
+                        <td>Merge Sort, Quick Sort</td>
+                        <td>🟡 Aceitável</td>
+                    </tr>
+                    <tr>
+                        <td>O(n²)</td>
+                        <td>Quadrática</td>
+                        <td>Bubble Sort</td>
+                        <td>🟠 Mau</td>
+                    </tr>
+                    <tr>
+                        <td>O(2ⁿ)</td>
+                        <td>Exponencial</td>
+                        <td>Fibonacci recursivo</td>
+                        <td>🔴 Muito Mau</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>💡 Dicas para Otimização</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li>Evite loops aninhados desnecessários</li>
+                    <li>Use estruturas de dados apropriadas (hash tables, árvores balanceadas)</li>
+                    <li>Considere trade-offs entre tempo e espaço</li>
+                    <li>Utilize algoritmos de dividir para conquistar quando possível</li>
+                    <li>Prefira iteração a recursão quando o desempenho é crítico</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>Algum erro? Reporte no meu GitHub @amaralantonioedf-hue </p>
+            <p style="margin-top: 10px; opacity: 0.8;">Obrigado por teres chegado aqui! 💜</p>
+        </footer>
+    </div>
+
+    <script>
+        let bars = [];
+        let sorting = false;
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function generateArray() {
+            if (sorting) return;
+            
+            const demo = document.getElementById('sortDemo');
+            demo.innerHTML = '';
+            bars = [];
+            
+            for (let i = 0; i < 15; i++) {
+                const height = Math.floor(Math.random() * 150) + 30;
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = height + 'px';
+                demo.appendChild(bar);
+                bars.push({element: bar, value: height});
+            }
+        }
+
+        async function startBubbleSort() {
+            if (sorting) return;
+            sorting = true;
+            
+            let n = bars.length;
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    bars[j].element.classList.add('comparing');
+                    bars[j + 1].element.classList.add('comparing');
+                    
+                    await sleep(200);
+                    
+                    if (bars[j].value > bars[j + 1].value) {
+                        await swap(j, j + 1);
+                    }
+                    
+                    bars[j].element.classList.remove('comparing');
+                    bars[j + 1].element.classList.remove('comparing');
+                }
+                bars[n - i - 1].element.classList.add('sorted');
+            }
+            bars[0].element.classList.add('sorted');
+            sorting = false;
+        }
+
+        async function swap(i, j) {
+            let temp = bars[i].value;
+            bars[i].value = bars[j].value;
+            bars[j].value = temp;
+            
+            bars[i].element.style.height = bars[i].value + 'px';
+            bars[j].element.style.height = bars[j].value + 'px';
+            
+            await sleep(200);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        generateArray();
+    </script>
+</body>
+</html>
